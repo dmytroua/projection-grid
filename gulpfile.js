@@ -15,7 +15,7 @@ var coveralls = require('gulp-coveralls');
 // coveralls-end
 
 var childProcess = require('child_process');
-var spawn = childProcess.spawn;
+// var spawn = childProcess.spawn;
 
 function webpackBuild(configFilePath) {
   return function (cb) {
@@ -61,9 +61,9 @@ function startSeleniumServer() {
 // -- Karma 0.13.19 taking long time to complete when run via gulp
 // https://github.com/karma-runner/karma/issues/1788
 // We should switch back to Karma API when the issue is fixed
-//
-// var Server = require('karma').Server;
-//
+
+var Server = require('karma').Server;
+
 // coveralls
 gulp.task('coveralls', ['test'], function () {
   if (!process.env.CI) {
@@ -88,18 +88,32 @@ gulp.task('test:unit', function (cb) {
   //   configFile: path.join(__dirname, 'karma.conf.js'),
   //   singleRun: true,
   // }, handler).start();
-  //
 
-  var karmaCmd = path.resolve('./node_modules/.bin/karma');
+  new Server({
+    configFile: path.join(__dirname, 'karma.conf.js'),
+    singleRun: true,
+    // singleRun: false,
+    // autoWatch: true,
+    // reporters: ['dots'],
+    // logLevel: 'debug',
+  }, handler).start();
 
-  if (process.platform === 'win32') {
-    karmaCmd += '.cmd';
-  }
 
-  spawn(karmaCmd, [
-    'start',
-    '--single-run',
-  ], { stdio: 'inherit' }).on('close', handler);
+  // var karmaCmd = path.resolve('./node_modules/.bin/karma');
+
+  // if (process.platform === 'win32') {
+  //   karmaCmd += '.cmd';
+  // }
+
+  // spawn(karmaCmd, [
+  //   'start',
+  //   // '--single-run',
+  //   '--no-single-run',
+  //   '--auto-watch',
+  //   '--reporters dots',
+  //   '--log-level debug',
+  //   // '-no-single-run --auto-watch --reporters dots - - log-level debug'
+  // ], { stdio: 'inherit' }).on('close', handler);
 });
 
 gulp.task('static', function () {

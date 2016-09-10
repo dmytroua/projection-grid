@@ -1,16 +1,16 @@
 var _ = require('underscore');
-var path = require('path');
+// var path = require('path');
 
 function getWebpackConfig() {
   var webpackConfig = _.omit(require('./webpack.config'), 'entry', 'externals');
   _.defaults(webpackConfig, { module: {} });
 
   webpackConfig.module.preLoaders = [
-    {
-      test: /\.js$/,
-      include: path.resolve('./js/'),
-      loader: 'istanbul-instrumenter',
-    },
+    // {
+    //   test: /\.js$/,
+    //   include: path.resolve('./js/'),
+    //   loader: 'istanbul-instrumenter',
+    // },
     {
       test: /sinon\.js$/,
       loader: 'imports?define=>false,require=>false',
@@ -63,8 +63,8 @@ module.exports = function (config) {
     },
 
     browsers: [
-      'PhantomJS',
-      // 'Chrome',
+      // 'PhantomJS',
+      'Chrome',
     ],
   });
 };
